@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PartyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Enrollment">
+    <Key>
+      <PropertyRef Name="EnrollmentId" />
+    </Key>
+    <Property Name="EnrollmentId" Type="Int32" Nullable="false" />
+    <Property Name="GuestResponseId" Type="Int32" Nullable="false" />
+    <Property Name="FoodId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Food" Relationship="Self.FK_Enrollment_Food" FromRole="Enrollment" ToRole="Food" />
+    <NavigationProperty Name="GuestResponse" Relationship="Self.FK_Enrollment_GuestResponse" FromRole="Enrollment" ToRole="GuestResponse" />
+  </EntityType>
+  <EntityType Name="Food">
+    <Key>
+      <PropertyRef Name="foodId" />
+    </Key>
+    <Property Name="foodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="foodTypeId" Type="Int32" Nullable="false" />
+    <Property Name="foodName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ImageFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Enrollments" Relationship="Self.FK_Enrollment_Food" FromRole="Food" ToRole="Enrollment" />
+    <NavigationProperty Name="FoodType" Relationship="Self.FK_Food_FoodTypeId" FromRole="Food" ToRole="FoodType" />
+  </EntityType>
+  <EntityType Name="FoodType">
+    <Key>
+      <PropertyRef Name="FoodTypeId" />
+    </Key>
+    <Property Name="FoodTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FoodTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Foods" Relationship="Self.FK_Food_FoodTypeId" FromRole="FoodType" ToRole="Food" />
+  </EntityType>
+  <EntityType Name="GuestResponse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="WillAttend" Type="Boolean" Nullable="false" />
+    <Property Name="TelephoneNumber" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Enrollments" Relationship="Self.FK_Enrollment_GuestResponse" FromRole="GuestResponse" ToRole="Enrollment" />
+  </EntityType>
+  <Association Name="FK_Enrollment_Food">
+    <End Role="Food" Type="Self.Food" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Food">
+        <PropertyRef Name="foodId" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="FoodId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enrollment_GuestResponse">
+    <End Role="GuestResponse" Type="Self.GuestResponse" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GuestResponse">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="GuestResponseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Food_FoodTypeId">
+    <End Role="FoodType" Type="Self.FoodType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Food" Type="Self.Food" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FoodType">
+        <PropertyRef Name="FoodTypeId" />
+      </Principal>
+      <Dependent Role="Food">
+        <PropertyRef Name="foodTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PartyEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Enrollments" EntityType="Self.Enrollment" />
+    <EntitySet Name="Foods" EntityType="Self.Food" />
+    <EntitySet Name="FoodTypes" EntityType="Self.FoodType" />
+    <EntitySet Name="GuestResponses" EntityType="Self.GuestResponse" />
+    <AssociationSet Name="FK_Enrollment_Food" Association="Self.FK_Enrollment_Food">
+      <End Role="Food" EntitySet="Foods" />
+      <End Role="Enrollment" EntitySet="Enrollments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enrollment_GuestResponse" Association="Self.FK_Enrollment_GuestResponse">
+      <End Role="GuestResponse" EntitySet="GuestResponses" />
+      <End Role="Enrollment" EntitySet="Enrollments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Food_FoodTypeId" Association="Self.FK_Food_FoodTypeId">
+      <End Role="FoodType" EntitySet="FoodTypes" />
+      <End Role="Food" EntitySet="Foods" />
+    </AssociationSet>
+    <FunctionImport Name="SelectValidFood" ReturnType="Collection(PartyModel.SelectValidFood_Result)">
+      <Parameter Name="pageCount" Mode="In" Type="Int32" />
+      <Parameter Name="pageNumber" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SelectValidFoodAmount" ReturnType="Collection(Int32)" />
+  </EntityContainer>
+  <ComplexType Name="SelectValidFood_Result">
+    <Property Type="Int64" Name="RowNumber" Nullable="true" />
+    <Property Type="Int32" Name="foodId" Nullable="false" />
+    <Property Type="Int32" Name="foodTypeId" Nullable="false" />
+    <Property Type="String" Name="foodName" Nullable="false" />
+    <Property Type="String" Name="ImageFileName" Nullable="true" />
+  </ComplexType>
+</Schema>

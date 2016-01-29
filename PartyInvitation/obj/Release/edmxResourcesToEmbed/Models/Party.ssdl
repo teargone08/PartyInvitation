@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PartyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Enrollment">
+    <Key>
+      <PropertyRef Name="EnrollmentId" />
+    </Key>
+    <Property Name="EnrollmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GuestResponseId" Type="int" Nullable="false" />
+    <Property Name="FoodId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Food">
+    <Key>
+      <PropertyRef Name="foodId" />
+    </Key>
+    <Property Name="foodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="foodTypeId" Type="int" Nullable="false" />
+    <Property Name="foodName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ImageFileName" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="FoodType">
+    <Key>
+      <PropertyRef Name="FoodTypeId" />
+    </Key>
+    <Property Name="FoodTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FoodTypeName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GuestResponse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="WillAttend" Type="bit" Nullable="false" />
+    <Property Name="TelephoneNumber" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Enrollment_Food">
+    <End Role="Food" Type="Self.Food" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Food">
+        <PropertyRef Name="foodId" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="FoodId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enrollment_GuestResponse">
+    <End Role="GuestResponse" Type="Self.GuestResponse" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GuestResponse">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="GuestResponseId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Food_FoodTypeId">
+    <End Role="FoodType" Type="Self.FoodType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Food" Type="Self.Food" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FoodType">
+        <PropertyRef Name="FoodTypeId" />
+      </Principal>
+      <Dependent Role="Food">
+        <PropertyRef Name="foodTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="SelectValidFood" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pageCount" Type="int" Mode="In" />
+    <Parameter Name="pageNumber" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SelectValidFoodAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="PartyModelStoreContainer">
+    <EntitySet Name="Enrollment" EntityType="Self.Enrollment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FoodType" EntityType="Self.FoodType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GuestResponse" EntityType="Self.GuestResponse" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Enrollment_Food" Association="Self.FK_Enrollment_Food">
+      <End Role="Food" EntitySet="Food" />
+      <End Role="Enrollment" EntitySet="Enrollment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enrollment_GuestResponse" Association="Self.FK_Enrollment_GuestResponse">
+      <End Role="GuestResponse" EntitySet="GuestResponse" />
+      <End Role="Enrollment" EntitySet="Enrollment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Food_FoodTypeId" Association="Self.FK_Food_FoodTypeId">
+      <End Role="FoodType" EntitySet="FoodType" />
+      <End Role="Food" EntitySet="Food" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

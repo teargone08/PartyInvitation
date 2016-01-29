@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PartyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Enrollment">
+          <Key>
+            <PropertyRef Name="EnrollmentId" />
+          </Key>
+          <Property Name="EnrollmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GuestResponseId" Type="int" Nullable="false" />
+          <Property Name="FoodId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="foodId" />
+          </Key>
+          <Property Name="foodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="foodTypeId" Type="int" Nullable="false" />
+          <Property Name="foodName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ImageFileName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FoodType">
+          <Key>
+            <PropertyRef Name="FoodTypeId" />
+          </Key>
+          <Property Name="FoodTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FoodTypeName" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GuestResponse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="WillAttend" Type="bit" Nullable="false" />
+          <Property Name="TelephoneNumber" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Enrollment_Food">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="foodId" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Enrollment_GuestResponse">
+          <End Role="GuestResponse" Type="Self.GuestResponse" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuestResponse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="GuestResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Food_FoodTypeId">
+          <End Role="FoodType" Type="Self.FoodType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Food" Type="Self.Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FoodType">
+              <PropertyRef Name="FoodTypeId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="foodTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SelectValidFood" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pageCount" Type="int" Mode="In" />
+          <Parameter Name="pageNumber" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SelectValidFoodAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="PartyModelStoreContainer">
+          <EntitySet Name="Enrollment" EntityType="Self.Enrollment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FoodType" EntityType="Self.FoodType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GuestResponse" EntityType="Self.GuestResponse" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Enrollment_Food" Association="Self.FK_Enrollment_Food">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="Enrollment" EntitySet="Enrollment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Enrollment_GuestResponse" Association="Self.FK_Enrollment_GuestResponse">
+            <End Role="GuestResponse" EntitySet="GuestResponse" />
+            <End Role="Enrollment" EntitySet="Enrollment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Food_FoodTypeId" Association="Self.FK_Food_FoodTypeId">
+            <End Role="FoodType" EntitySet="FoodType" />
+            <End Role="Food" EntitySet="Food" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PartyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Enrollment">
+          <Key>
+            <PropertyRef Name="EnrollmentId" />
+          </Key>
+          <Property Name="EnrollmentId" Type="Int32" Nullable="false" />
+          <Property Name="GuestResponseId" Type="Int32" Nullable="false" />
+          <Property Name="FoodId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Food" Relationship="Self.FK_Enrollment_Food" FromRole="Enrollment" ToRole="Food" />
+          <NavigationProperty Name="GuestResponse" Relationship="Self.FK_Enrollment_GuestResponse" FromRole="Enrollment" ToRole="GuestResponse" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="foodId" />
+          </Key>
+          <Property Name="foodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="foodTypeId" Type="Int32" Nullable="false" />
+          <Property Name="foodName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImageFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Enrollments" Relationship="Self.FK_Enrollment_Food" FromRole="Food" ToRole="Enrollment" />
+          <NavigationProperty Name="FoodType" Relationship="Self.FK_Food_FoodTypeId" FromRole="Food" ToRole="FoodType" />
+        </EntityType>
+        <EntityType Name="FoodType">
+          <Key>
+            <PropertyRef Name="FoodTypeId" />
+          </Key>
+          <Property Name="FoodTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FoodTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Foods" Relationship="Self.FK_Food_FoodTypeId" FromRole="FoodType" ToRole="Food" />
+        </EntityType>
+        <EntityType Name="GuestResponse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="WillAttend" Type="Boolean" Nullable="false" />
+          <Property Name="TelephoneNumber" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Enrollments" Relationship="Self.FK_Enrollment_GuestResponse" FromRole="GuestResponse" ToRole="Enrollment" />
+        </EntityType>
+        <Association Name="FK_Enrollment_Food">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="foodId" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Enrollment_GuestResponse">
+          <End Role="GuestResponse" Type="Self.GuestResponse" Multiplicity="1" />
+          <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuestResponse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Enrollment">
+              <PropertyRef Name="GuestResponseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Food_FoodTypeId">
+          <End Role="FoodType" Type="Self.FoodType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Food" Type="Self.Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FoodType">
+              <PropertyRef Name="FoodTypeId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="foodTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PartyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Enrollments" EntityType="Self.Enrollment" />
+          <EntitySet Name="Foods" EntityType="Self.Food" />
+          <EntitySet Name="FoodTypes" EntityType="Self.FoodType" />
+          <EntitySet Name="GuestResponses" EntityType="Self.GuestResponse" />
+          <AssociationSet Name="FK_Enrollment_Food" Association="Self.FK_Enrollment_Food">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="Enrollment" EntitySet="Enrollments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Enrollment_GuestResponse" Association="Self.FK_Enrollment_GuestResponse">
+            <End Role="GuestResponse" EntitySet="GuestResponses" />
+            <End Role="Enrollment" EntitySet="Enrollments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Food_FoodTypeId" Association="Self.FK_Food_FoodTypeId">
+            <End Role="FoodType" EntitySet="FoodTypes" />
+            <End Role="Food" EntitySet="Foods" />
+          </AssociationSet>
+          <FunctionImport Name="SelectValidFood" ReturnType="Collection(PartyModel.SelectValidFood_Result)">
+            <Parameter Name="pageCount" Mode="In" Type="Int32" />
+            <Parameter Name="pageNumber" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SelectValidFoodAmount" ReturnType="Collection(Int32)" />
+        </EntityContainer>
+        <ComplexType Name="SelectValidFood_Result">
+          <Property Type="Int64" Name="RowNumber" Nullable="true" />
+          <Property Type="Int32" Name="foodId" Nullable="false" />
+          <Property Type="Int32" Name="foodTypeId" Nullable="false" />
+          <Property Type="String" Name="foodName" Nullable="false" />
+          <Property Type="String" Name="ImageFileName" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PartyModelStoreContainer" CdmEntityContainer="PartyEntities">
+          <EntitySetMapping Name="Enrollments">
+            <EntityTypeMapping TypeName="PartyModel.Enrollment">
+              <MappingFragment StoreEntitySet="Enrollment">
+                <ScalarProperty Name="EnrollmentId" ColumnName="EnrollmentId" />
+                <ScalarProperty Name="GuestResponseId" ColumnName="GuestResponseId" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foods">
+            <EntityTypeMapping TypeName="PartyModel.Food">
+              <MappingFragment StoreEntitySet="Food">
+                <ScalarProperty Name="foodId" ColumnName="foodId" />
+                <ScalarProperty Name="foodTypeId" ColumnName="foodTypeId" />
+                <ScalarProperty Name="foodName" ColumnName="foodName" />
+                <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FoodTypes">
+            <EntityTypeMapping TypeName="PartyModel.FoodType">
+              <MappingFragment StoreEntitySet="FoodType">
+                <ScalarProperty Name="FoodTypeId" ColumnName="FoodTypeId" />
+                <ScalarProperty Name="FoodTypeName" ColumnName="FoodTypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GuestResponses">
+            <EntityTypeMapping TypeName="PartyModel.GuestResponse">
+              <MappingFragment StoreEntitySet="GuestResponse">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="WillAttend" ColumnName="WillAttend" />
+                <ScalarProperty Name="TelephoneNumber" ColumnName="TelephoneNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SelectValidFood" FunctionName="PartyModel.Store.SelectValidFood">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PartyModel.SelectValidFood_Result">
+                <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+                <ScalarProperty Name="foodId" ColumnName="foodId" />
+                <ScalarProperty Name="foodTypeId" ColumnName="foodTypeId" />
+                <ScalarProperty Name="foodName" ColumnName="foodName" />
+                <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectValidFoodAmount" FunctionName="PartyModel.Store.SelectValidFoodAmount" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

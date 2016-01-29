@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PartyModelStoreContainer" CdmEntityContainer="PartyEntities">
+    <EntitySetMapping Name="Enrollments">
+      <EntityTypeMapping TypeName="PartyModel.Enrollment">
+        <MappingFragment StoreEntitySet="Enrollment">
+          <ScalarProperty Name="EnrollmentId" ColumnName="EnrollmentId" />
+          <ScalarProperty Name="GuestResponseId" ColumnName="GuestResponseId" />
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Foods">
+      <EntityTypeMapping TypeName="PartyModel.Food">
+        <MappingFragment StoreEntitySet="Food">
+          <ScalarProperty Name="foodId" ColumnName="foodId" />
+          <ScalarProperty Name="foodTypeId" ColumnName="foodTypeId" />
+          <ScalarProperty Name="foodName" ColumnName="foodName" />
+          <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FoodTypes">
+      <EntityTypeMapping TypeName="PartyModel.FoodType">
+        <MappingFragment StoreEntitySet="FoodType">
+          <ScalarProperty Name="FoodTypeId" ColumnName="FoodTypeId" />
+          <ScalarProperty Name="FoodTypeName" ColumnName="FoodTypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GuestResponses">
+      <EntityTypeMapping TypeName="PartyModel.GuestResponse">
+        <MappingFragment StoreEntitySet="GuestResponse">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="WillAttend" ColumnName="WillAttend" />
+          <ScalarProperty Name="TelephoneNumber" ColumnName="TelephoneNumber" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="SelectValidFood" FunctionName="PartyModel.Store.SelectValidFood">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PartyModel.SelectValidFood_Result">
+          <ScalarProperty Name="RowNumber" ColumnName="RowNumber" />
+          <ScalarProperty Name="foodId" ColumnName="foodId" />
+          <ScalarProperty Name="foodTypeId" ColumnName="foodTypeId" />
+          <ScalarProperty Name="foodName" ColumnName="foodName" />
+          <ScalarProperty Name="ImageFileName" ColumnName="ImageFileName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SelectValidFoodAmount" FunctionName="PartyModel.Store.SelectValidFoodAmount" />
+  </EntityContainerMapping>
+</Mapping>

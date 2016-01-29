@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PartyInvitation.Models.Food>
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Scripts/style.css" rel="stylesheet" />
+<h2>Food Lists</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr class="alert-danger">
+        <th>
+            @*@Html.DisplayNameFor(model => model.foodName)*@
+            <label>Food Name</label>
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.ImageFileName)*@
+            <strong>Image</strong>
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.FoodType.FoodTypeName)*@
+            <strong>Food Type</strong>
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr class="success">
+        <td>
+            @Html.DisplayFor(modelItem => item.foodName)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ImageFileName)
+        </td>*@        
+        <td>
+            <img src="@Url.Content("~/UploadedFiles/"+item.ImageFileName) " alt="@item.foodName" width="300" height="120" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FoodType.FoodTypeName)
+        </td>     
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.foodId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.foodId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.foodId })
+        </td>*@
+    </tr>
+}
+
+</table>
